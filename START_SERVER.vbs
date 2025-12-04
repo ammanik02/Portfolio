@@ -3,3 +3,5 @@ WshShell.CurrentDirectory = CreateObject("Scripting.FileSystemObject").GetParent
 WshShell.Run "cmd /c npm run dev", 0, False
 Set WshShell = Nothing
 
+
+

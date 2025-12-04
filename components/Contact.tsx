@@ -1,31 +1,51 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
+  const [status, setStatus] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log("Form submitted:", formData);
-    // Reset form
-    setFormData({ name: "", email: "", message: "" });
-    alert("Thank you for your message! I'll get back to you soon.");
-  };
+    setStatus("Sending...");
+    setError("");
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    // ✅ Web3Forms access key (must be set in .env.local)
+    formData.append(
+      "access_key",
+      process.env.NEXT_PUBLIC_WEB3FORMS_KEY as string
+    );
+
+    // Optional, but nice:
+    formData.append("subject", "New message from your portfolio");
+    formData.append("from_name", "Portfolio Contact Form");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setStatus("Message Sent Successfully 🎉");
+        form.reset();
+      } else {
+        console.error(data);
+        setError(data.message || "An error occurred ❌");
+        setStatus("");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Network error. Please try again ❌");
+      setStatus("");
+    }
   };
 
   return (
@@ -174,69 +194,36 @@ const Contact = () => {
               <h3 className="text-2xl font-bold mb-6 text-gray-800">
                 Send a Message
               </h3>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
-                    Your Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
-                    placeholder="Your Name"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
-                    Your Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
-                    placeholder="your.email@example.com"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
-                    Your Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                    rows={6}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all resize-none"
-                    placeholder="Your Message"
-                  />
-                </div>
-                <motion.button
+              <form onSubmit={handleSubmit} className="space-y-4 max-w-xl mx-auto">
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Your Name"
+                  required
+                  className="border p-3 rounded w-full"
+                />
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  placeholder="your@email.com"
+                  className="border p-3 rounded w-full"
+                />
+                <textarea
+                  name="message"
+                  required
+                  placeholder="Your message..."
+                  className="border p-3 rounded w-full"
+                  rows={5}
+                ></textarea>
+                <button
                   type="submit"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full px-8 py-4 rounded-lg gradient-bg text-white font-semibold shadow-lg hover:shadow-xl transition-shadow"
+                  className="w-full bg-gradient-to-r from-purple-600 to-orange-500 text-white font-bold py-3 rounded"
                 >
-                  Send Message
-                </motion.button>
+                  {status === "Sending..." ? "Sending..." : "Send Message"}
+                </button>
+                {status && <p className="text-green-600">{status}</p>}
+                {error && <p className="text-red-600">{error}</p>}
               </form>
             </div>
           </motion.div>
@@ -247,4 +234,3 @@ const Contact = () => {
 };
 
 export default Contact;
-

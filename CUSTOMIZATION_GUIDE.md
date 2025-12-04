@@ -117,3 +117,5 @@ The website is **already fully responsive** and works on:
 - Check `HOW_TO_ADD_PHOTOS.md` for detailed photo instructions
 - Check `TROUBLESHOOTING.md` for common issues
 
+
+

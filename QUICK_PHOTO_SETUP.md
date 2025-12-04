@@ -111,3 +111,5 @@ Manik.dev  // Change to match navbar
 - See `HOW_TO_ADD_PHOTOS.md` for detailed instructions
 - See `CUSTOMIZATION_GUIDE.md` for advanced customization
 
+
+

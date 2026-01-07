@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { ScrollFade } from "./ScrollFade";
 
 const Services = () => {
   const services = [
@@ -32,40 +32,32 @@ const Services = () => {
       className="py-20 px-4 sm:px-6 lg:px-8 bg-white"
     >
       <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="gradient-text">What I Do</span>
-          </h2>
-          <p className="text-lg text-gray-600">
-            Services I offer
-          </p>
-        </motion.div>
+        <ScrollFade>
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              <span className="gradient-text">What I Do</span>
+            </h2>
+            <p className="text-lg text-gray-600">
+              Services I offer
+            </p>
+          </div>
+        </ScrollFade>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service, index) => (
-            <motion.div
-              key={service.title}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ y: -10 }}
-              className="bg-gradient-to-br from-gray-50 to-purple-50 rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow"
-            >
-              <div className="text-5xl mb-4">{service.icon}</div>
-              <h3 className="text-xl font-bold mb-3 text-gray-800">
-                {service.title}
-              </h3>
-              <p className="text-gray-600 leading-relaxed">
-                {service.description}
-              </p>
-            </motion.div>
+            <ScrollFade key={service.title} delay={index * 0.1}>
+              <div
+                className="bg-gradient-to-br from-gray-50 to-purple-50 rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow h-full hover:-translate-y-2 duration-300"
+              >
+                <div className="text-5xl mb-4">{service.icon}</div>
+                <h3 className="text-xl font-bold mb-3 text-gray-800">
+                  {service.title}
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  {service.description}
+                </p>
+              </div>
+            </ScrollFade>
           ))}
         </div>
       </div>
@@ -74,6 +66,8 @@ const Services = () => {
 };
 
 export default Services;
+
+
 
 
 

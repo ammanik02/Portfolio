@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { ScrollFade } from "./ScrollFade";
 
 const Skills = () => {
   const skills = [
@@ -21,37 +21,29 @@ const Skills = () => {
       className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50"
     >
       <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="gradient-text">Skills & Technologies</span>
-          </h2>
-          <p className="text-lg text-gray-600">
-            Technologies and tools I work with
-          </p>
-        </motion.div>
+        <ScrollFade>
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              <span className="gradient-text">Skills & Technologies</span>
+            </h2>
+            <p className="text-lg text-gray-600">
+              Technologies and tools I work with
+            </p>
+          </div>
+        </ScrollFade>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {skills.map((skill, index) => (
-            <motion.div
-              key={skill.name}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
-              whileHover={{ scale: 1.05, y: -5 }}
-              className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow text-center"
-            >
-              <div className="text-4xl mb-3">{skill.icon}</div>
-              <h3 className="text-lg font-semibold text-gray-800">
-                {skill.name}
-              </h3>
-            </motion.div>
+            <ScrollFade key={skill.name} delay={index * 0.1}>
+              <div
+                className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow text-center h-full flex flex-col items-center justify-center hover:-translate-y-1 duration-300"
+              >
+                <div className="text-4xl mb-3">{skill.icon}</div>
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {skill.name}
+                </h3>
+              </div>
+            </ScrollFade>
           ))}
         </div>
       </div>
